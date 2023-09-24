@@ -21,11 +21,16 @@ export default function NewNotes() {
       let oldTodos = [];
       let notelist = [];
       todos = JSON.parse(await AsyncStorage.getItem('NOTE')) || [];
+      console.log('todos', todos);
       todos.map(item => {
         notelist.push(item);
       });
       setNewTodo([]);
-      notelist.push({title: title, desc: desc});
+      notelist.push({
+        title: title,
+        desc: desc,
+        id: new Date().getTime().toString(),
+      });
       const jsonValue = JSON.stringify(notelist);
       await AsyncStorage.setItem('NOTE', jsonValue);
       navigation.goBack();
@@ -36,10 +41,16 @@ export default function NewNotes() {
   };
   return (
     <View style={styles.container}>
+      <View style={styles.headerView}>
+        <Text style={styles.headerText}>All Notes</Text>
+      </View>
       <TextInput
         placeholder="Enter notes title"
-        placeholderTextColor={'orange'}
-        style={[styles.inputStyle,{marginTop:100}]}
+        placeholderTextColor={'#fff'}
+        style={[
+          styles.inputStyle,
+          {marginTop: 50, textTransform: 'capitalize'},
+        ]}
         value={title}
         onChangeText={text => {
           setTitle(text);
@@ -47,10 +58,10 @@ export default function NewNotes() {
       />
       <TextInput
         placeholder="Enter notes Desc"
-        placeholderTextColor={'orange'}
+        placeholderTextColor={'#fff'}
         multiline={true}
-        numberOfLines={4}
-        style={[styles.inputStyle,{height:120,textAlignVertical:'top'}]}
+        numberOfLines={6}
+        style={[styles.inputStyle, {height: 130, textAlignVertical: 'top'}]}
         value={desc}
         onChangeText={text => {
           setDesc(text);
@@ -71,18 +82,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#191825',
+    backgroundColor: '#000',
   },
   inputStyle: {
     width: '90%',
-    height: 50,
     borderColor: 'orange',
     borderWidth: 1.5,
     borderRadius: 15,
     paddingLeft: 20,
     marginBottom: 20,
-    color:'white',
-    fontSize:17
+    color: 'white',
+    fontSize: 17,
+    fontWeight: '300',
+    letterSpacing: 0.7,
   },
   addBtn: {
     width: '90%',
@@ -96,7 +108,22 @@ const styles = StyleSheet.create({
     backgroundColor: 'orange',
   },
   btnText: {
-    color: '#191825',
+    color: '#000',
     fontSize: 18,
+    fontWeight: '700',
+  },
+  headerView: {
+    height: 55,
+    width: '100%',
+    backgroundColor: '#191825',
+    marginTop: 10,
+    borderRadius: 10,
+    alignSelf: 'center',
+    justifyContent: 'center',
+  },
+  headerText: {
+    color: '#fff',
+    fontSize: 20,
+    paddingLeft: 20,
   },
 });
